@@ -10,7 +10,7 @@ docker build . -t comp-kinch
 ```
 Then run the container
 ```
-docker run -p 3000:3000 comp-kinch
+docker run -p 3000:3000 -d comp-kinch
 ``` 
 By default the production version is available on port 3000, but this can be changed as necessary.
 
