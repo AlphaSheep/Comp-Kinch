@@ -6,11 +6,11 @@ A website that displays KinchRank-like ranking for WCA competitions.
 
 Run a production server in a docker container. First create an image
 ```
-sudo docker build . -t comp-kinch
+docker build . -t comp-kinch
 ```
 Then run the container
 ```
-sudo docker run -p 3000:3000 comp-kinch
+docker run -p 3000:3000 comp-kinch
 ``` 
 By default the production version is available on port 3000, but this can be changed as necessary.
 
