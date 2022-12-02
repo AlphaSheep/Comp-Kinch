@@ -103,8 +103,6 @@ class ResultsTable extends React.Component {
   render() {
     const wcaLiveLink = "https://live.worldcubeassociation.org"
     
-    console.log(this.state.filter);
-
     const filteredResults = this.state.results_table.filter(value => {
       if (this.state.filter) {
         return value.name.toLowerCase().includes(this.state.filter.toLowerCase())
