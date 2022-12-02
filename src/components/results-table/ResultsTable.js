@@ -1,18 +1,20 @@
 import React from 'react';
 import axios from 'axios';
-import { Table, Skeleton, Alert, Typography } from 'antd';
+import { Table, Skeleton, Alert, Typography, Input, Divider } from 'antd';
 import get_kinch_table_from_wcif from '../../lib/kinchcalc'
 import "@cubing/icons";
 import EventName from './EventName';
 import "./ResultsTable.less"
 
 const { Text } = Typography;
+const { Search } = Input;
 
 class ResultsTable extends React.Component {
   state = {
     loading: true,
     comp_data: [],
     results_table: [],
+    filter: "",
     columns: [],
     has_result: false,
     complete_results: false,
@@ -101,6 +103,17 @@ class ResultsTable extends React.Component {
   render() {
     const wcaLiveLink = "https://live.worldcubeassociation.org"
     
+    console.log(this.state.filter);
+
+    const filteredResults = this.state.results_table.filter(value => {
+      if (this.state.filter) {
+        return value.name.toLowerCase().includes(this.state.filter.toLowerCase())
+      } else {
+        return true;
+      }
+    });
+    const handleSearch = (e) => this.setState({filter: e.target.value});
+
     return <>
       {this.state.error ? 
       <Alert
@@ -121,12 +134,16 @@ class ResultsTable extends React.Component {
                 showIcon
               />
             } 
-            <Table 
-              columns={this.formatColumns(this.state.columns)}
-              dataSource={this.state.results_table} 
-              sticky={true}
-              scroll={{x: 'max-content'}}
-            />
+            <>
+              <Search placeholder="Filter competitors" loading={this.state.loading} enterButton onChange={handleSearch}></Search>
+              <Divider />
+              <Table 
+                columns={this.formatColumns(this.state.columns)}
+                dataSource={filteredResults} 
+                sticky={true}
+                scroll={{x: 'max-content'}}
+              />
+            </>
           </>
             : 
           <Alert
