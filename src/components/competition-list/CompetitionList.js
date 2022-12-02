@@ -198,7 +198,7 @@ class BaseCompetitionList extends React.Component {
             <Skeleton title={false} loading={comp.loading} active>
               <List.Item.Meta
                 avatar={<FlagIcon code={comp.country_iso2.toLowerCase()} size="lg" className='comp-flag'></FlagIcon>}
-                title={comp.short_name}
+                title={comp.name}
                 description={formatDateRange(comp.start_date, comp.end_date)}
               />
             </Skeleton>
