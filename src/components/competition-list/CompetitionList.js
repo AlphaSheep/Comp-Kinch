@@ -214,7 +214,7 @@ class CurrentCompetitionList extends BaseCompetitionList {
   constructor(props) {
     super(props);
     const start = dateOffsetFromToday(-7);
-    const end = dateOffsetFromToday(1);
+    const end = dateOffsetFromToday(0);
 
     const params = {
       start: start,
