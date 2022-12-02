@@ -43,15 +43,6 @@ const About = () => {
           Methodology
         </h1>
 
-        {Modernizr.mathml ? null : <p>
-          <Alert message={<p>
-            It looks like your browser does not support MathML. The equations below may not display correctly. 
-            You should <a href="https://www.google.com/search?q=enable+mathml+in+my+browser">enable MathML in your browser</a> so
-            that you don't miss out.
-          </p>} 
-          type="warning" />
-        </p>}
-
         <p>
           For each competitor, a score between 0 and 100 is calculated for each event that was held at the competition. 
           The best result that that competitor achieved in any round is taken as their personal best result.

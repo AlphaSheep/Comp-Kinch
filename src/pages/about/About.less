@@ -1,5 +1,16 @@
-.katex-html {
+@import (less) 'katex/dist/katex.min.css';
+
+.mathml .katex-mathml {
+  display: inline-block;
+}
+
+.mathml .katex-html,
+.no-mathml .katex-mathml {
   display: none;
+}
+
+.no-mathml .katex-html {
+  display: inline-block;
 }
 
 h1 {
