@@ -28,11 +28,6 @@ export default class MainLayout extends React.Component {
 
     const menuItems = [
       {
-        key: "logo",
-        label: <Link to="/">Comp Kinch</Link>,
-        icon: <ThunderboltOutlined />
-      },
-      {
         key: "home",
         label: <Link to="/">Home</Link>,
         icon: <HomeOutlined />
