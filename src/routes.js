@@ -27,7 +27,7 @@ const AppRouter = () => {
     <Router>
       <MainLayout>
         <Suspense fallback={<div className="lazy-loading">Loading...</div>}>
-          <Routes>
+          <Routes basename={process.env.PUBLIC_URL}>
             {routes.map((route, i) => (
               <Route path={route.path} key={i} element={<route.component />} />
             ))}
