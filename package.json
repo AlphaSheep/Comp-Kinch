@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rm dist/bundle.js",
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html --public-url https://alphasheep.github.io/Comp-Kinch/",
     "test": "jest"
   },
   "dependencies": {
