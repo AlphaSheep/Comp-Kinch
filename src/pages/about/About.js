@@ -117,8 +117,14 @@ const About = () => {
           events were not recognised by the WCA.
         </p>
         <p>
-          It also means that it a competitor gets 0 points for an event you compete in if they fail to make the 
-          cutoff. While this is unfortunate, it is also a limitation of the original 
+          It also means that a competitor can recieve 0 points for an event that they compete in (for example, 
+          if they fail to make the cutoff). While this is unfortunate, it is also a limitation of the original 
+          KinchRanks proposal. 
+        </p>
+        <p>
+          If you find any errors or have any suggestions on how to improve the calculation, 
+          please <a href="https://github.com/AlphaSheep/Comp-Kinch/issues/new">create a 
+          new issue on GitHub</a>.
         </p>
 
         
