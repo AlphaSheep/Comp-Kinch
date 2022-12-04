@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { Table, Skeleton, Alert, Typography, Input, Divider } from 'antd';
-import get_kinch_table_from_wcif from '../../lib/kinchcalc'
+import { RotateRightOutlined } from '@ant-design/icons';
+import get_kinch_table_from_wcif from '../../lib/kinchcalc';
 import "@cubing/icons";
 import EventName from './EventName';
 import "./ResultsTable.less"
@@ -123,7 +124,7 @@ class ResultsTable extends React.Component {
       <Skeleton loading={this.state.loading} active>
         {this.state.has_result ? 
           <>
-            {this.state.complete_results ? null :
+            {this.state.complete_results ? null : <>
               <Alert
                 message="Incomplete results"
                 description={<span>Some events are missing results. The competition might be ongoing. If you are an organiser or delegate for this competition, 
@@ -131,8 +132,18 @@ class ResultsTable extends React.Component {
                 type="warning"
                 showIcon
               />
-            } 
+              <Divider />
+            </>} 
             <>
+              <div className='small-screen-warning'>
+                <Alert
+                  description={<span>Switch to landscape mode for more detail. </span>}
+                  type="info"
+                  icon={<RotateRightOutlined />}
+                  showIcon
+                />
+                <Divider />
+              </div>
               <Search placeholder="Filter competitors" loading={this.state.loading} enterButton onChange={handleSearch}></Search>
               <Divider />
               <Table 
