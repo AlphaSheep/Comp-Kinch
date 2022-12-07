@@ -2,7 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { Table, Skeleton, Alert, Typography, Input, Divider } from 'antd';
 import { RotateRightOutlined } from '@ant-design/icons';
-import get_kinch_table_from_wcif from '../../lib/kinchcalc';
+import getKinchTableFromWCIF from '../../lib/kinchcalc';
+import convertOfficialResultsToWCIFlike from '../../lib/wciftool';
 import "@cubing/icons";
 import EventName from './EventName';
 import "./ResultsTable.less"
@@ -26,31 +27,58 @@ class ResultsTable extends React.Component {
     this.getData()
   }
 
+  calcAndSetResultState(data) {
+    const { has_result, complete, results_table, columns } = getKinchTableFromWCIF(data);
+    this.setState({
+      loading: false, 
+      has_result: has_result,
+      complete_results: complete,
+      results_table: results_table, 
+      columns: columns,
+      error: false
+    });
+  }
+
+  handleFetchError(err) {
+    if (err.code !== "ERR_CANCELED") {
+      console.error(err.message);
+      this.setState({
+        error: true
+      });
+    }
+  }
+
   getData() {
     const baseURL = process.env.REACT_APP_WCA_API_URL;
-    const compDataURL = baseURL + `/competitions/${this.props.compid}/wcif/public`;
+    const wcifURL = baseURL + `/competitions/${this.props.compid}/wcif/public`;
+    const wcaResultURL = baseURL + `/competitions/${this.props.compid}/results`;
 
-    axios.get(compDataURL)
+    /* 
+    We want to prioritise using official WCA results where available, then try WCIF results. 
+    We make both requests simultaneously. If the WCA results are not empty, then use those.
+    If the WCIF arrives, only use it if there are not official results, and leave the WCA 
+    request if it is running.
+    */
+
+    axios.get(wcaResultURL)
+      .then(response => response.data)
+      .then(data => { 
+        if (data.length > 0) {
+          let comp = convertOfficialResultsToWCIFlike(data);
+          this.calcAndSetResultState(comp);
+        } 
+      })
+      .catch(err => this.handleFetchError(err));
+
+    axios.get(wcifURL)
       .then(response => response.data)
       .then(data => {
         this.props.setCompTitle(data.name);
-        const { has_result, complete, results_table, columns } = get_kinch_table_from_wcif(data);
-
-        this.setState({
-          loading: false, 
-          has_result: has_result,
-          complete_results: complete,
-          results_table: results_table, 
-          columns: columns,
-          error: false
-        })
+        if (!this.state.has_result) {
+          this.calcAndSetResultState(data);
+        }
       })
-      .catch(err => {
-        console.error(err.message);
-        this.setState({
-          error: true
-        });
-      });
+      .catch(err => this.handleFetchError(err));
   }
 
   formatColumns(columnNames) {

@@ -1,7 +1,7 @@
 const ALLOW_SINGLE_EVENTS = ["333fm", "333bf", "444bf", "555bf", "333mbf"];
 const MULTI_EVENT = "333mbf";
 
-export default function get_kinch_table_from_wcif(competition) {
+export default function getKinchTableFromWCIF(competition) {
 
   const kinch = calculateKinchTable(competition);
   const { has_result, complete } = checkHasCompleteResults(kinch);
