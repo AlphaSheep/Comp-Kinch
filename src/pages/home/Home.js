@@ -1,22 +1,21 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import PageLayout from '../../layout/PageLayout';
 import CompetitionListContainer from '../../components/competition-list/CompetitionList'
 
-const Home = () => {
-
-  let location = useLocation();
-  if (location.pathname !== '/') {
-    return null;
+class Home extends React.Component {
+  componentDidMount() {
+    document.title = "Competition KinchRanks: Overall rankings for WCA Competitions"
   }
 
-  return (
-    <PageLayout title="Home">
+  render() {
+    return (
+      <PageLayout title="Home">
       <>
         <CompetitionListContainer></CompetitionListContainer>
       </>      
-    </PageLayout>
-  );
-};
+      </PageLayout>
+    );
+  }
+}
 
 export default Home;

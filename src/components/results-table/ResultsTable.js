@@ -73,6 +73,7 @@ class ResultsTable extends React.Component {
     axios.get(wcifURL)
       .then(response => response.data)
       .then(data => {
+        document.title = data.shortName + ": Competition KinchRanks";
         this.props.setCompTitle(data.name);
         if (!this.state.has_result) {
           this.calcAndSetResultState(data);
