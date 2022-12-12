@@ -5,6 +5,12 @@
             "name": "Run npm start",
             "request": "launch",
             "type": "node-terminal"
+        },
+        {
+            "command": "npm test",
+            "name": "Run tests",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }

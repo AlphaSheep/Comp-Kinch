@@ -11,6 +11,11 @@
     "build": "parcel build src/index.html --public-url https://comp-kinch.sylvermyst.com/",
     "test": "jest"
   },
+  "babel": {
+    "presets": [
+      ["@babel/preset-env", {"targets": {"node": "current"}}]
+    ]
+  },
   "dependencies": {
     "@ant-design/icons": "^4.8.0",
     "@cubing/icons": "^1.0.6",
