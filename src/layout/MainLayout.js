@@ -1,7 +1,7 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Divider } from 'antd';
 import { Link } from 'react-router-dom';
-import { HomeOutlined, QuestionCircleOutlined, ThunderboltOutlined, GithubOutlined } from '@ant-design/icons';
+import { HomeOutlined, QuestionCircleOutlined, GithubOutlined } from '@ant-design/icons';
 import './MainLayout.less';
 import { ThemeButton, ThemeContext } from '../theme/themes';
 
@@ -38,8 +38,7 @@ export default class MainLayout extends React.Component {
         key: "about",
         label: <Link to="/about">About</Link>,
         icon: <QuestionCircleOutlined />
-      },
-
+      }
     ]
 
     return (      
@@ -56,12 +55,12 @@ export default class MainLayout extends React.Component {
                 ]}
                 items={menuItems}
               />       
-              <ThemeButton /> 
-
             </Sider>
             <Layout>
               {children}
               <Footer>
+                <ThemeButton />
+                <Divider type="vertical" />
                 <a
                   target="_blank"
                   rel="noopener noreferrer"

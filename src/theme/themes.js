@@ -1,7 +1,8 @@
 import React from "react";
-import { Button } from 'antd';
+import './Theme.less'
+import './light.less'
 import './dark.less'
-
+import { Switch } from "antd";
 
 export const ThemeContext = React.createContext({
   theme: 'light',
@@ -15,7 +16,15 @@ export class ThemeButton extends React.Component {
   render() {
     return <ThemeContext.Consumer>
       {({ theme, toggleTheme }) => 
-        <Button shape="circle" onClick={toggleTheme}>T</Button>
+       
+        <Switch 
+          className="dark-mode-toggle"
+          checkedChildren={<>🔆</>}
+          unCheckedChildren={<>🌙</>}
+          checked={theme==='light'}
+          defaultChecked={theme==='light'}
+          onClick={toggleTheme}
+        />
       }
     </ThemeContext.Consumer>
   }
