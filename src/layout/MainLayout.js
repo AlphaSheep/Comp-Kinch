@@ -3,6 +3,8 @@ import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { HomeOutlined, QuestionCircleOutlined, ThunderboltOutlined, GithubOutlined } from '@ant-design/icons';
 import './MainLayout.less';
+import { ThemeButton, ThemeContext } from '../theme/themes';
+
 
 const { Footer, Sider } = Layout;
 
@@ -14,7 +16,7 @@ export default class MainLayout extends React.Component {
     super(props);
 
     this.state = {
-      collapsed: true,
+      collapsed: true
     };
   }
 
@@ -36,37 +38,42 @@ export default class MainLayout extends React.Component {
         key: "about",
         label: <Link to="/about">About</Link>,
         icon: <QuestionCircleOutlined />
-      }
+      },
+
     ]
 
     return (      
-      <Layout>
-        <Sider className='sider' collapsible collapsed={collapsed} onCollapse={this.onCollapse} collapsedWidth="48">
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={[
-              aboutSubRoutes.includes(window.location.pathname)
-                ? '1'
-                : rootRoutes.indexOf(window.location.pathname).toString(),
-            ]}
-            items={menuItems}
-          />            
-        </Sider>
-        <Layout>
-          {children}
-          <Footer>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://github.com/AlphaSheep/Comp-Kinch"
-            >
-              <GithubOutlined /> &nbsp;
-              GitHub
-            </a>     
-          </Footer>
-        </Layout>
-      </Layout>
+      <ThemeContext.Consumer>
+        {({ theme }) => <Layout className={theme} hasSider>
+            <Sider className='sider' collapsible collapsed={collapsed} onCollapse={this.onCollapse} collapsedWidth="48">
+              <Menu
+                theme="dark"
+                mode="inline"
+                defaultSelectedKeys={[
+                  aboutSubRoutes.includes(window.location.pathname)
+                    ? '1'
+                    : rootRoutes.indexOf(window.location.pathname).toString(),
+                ]}
+                items={menuItems}
+              />       
+              <ThemeButton /> 
+
+            </Sider>
+            <Layout>
+              {children}
+              <Footer>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/AlphaSheep/Comp-Kinch"
+                >
+                  <GithubOutlined /> &nbsp;
+                  GitHub
+                </a>     
+              </Footer>
+            </Layout>
+          </Layout>}
+      </ThemeContext.Consumer>
     );
   }
 }
