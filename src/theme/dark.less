@@ -1,0 +1,22 @@
+.dark {
+  @import 'antd/dist/antd.dark.less';
+
+  @body-background: #181818;
+  @text-color: #eeeeee;
+  @input-placeholder-color: #bbb;
+
+  color: @text-color;
+
+  .ant-alert-with-description .ant-alert-description {
+    display: block;
+  }
+
+  .comp-list-item:hover li {
+    background-color: @table-row-hover-bg;
+    color: @text-color;
+  }
+
+  .ant-typography-success {
+    color: @success-color;
+  }
+}
