@@ -1,11 +1,7 @@
 name: Run tests
 
 # Controls when the workflow will run
-on: [push, pull_request, workflow_dispatch]
-
-concurrency:
-  group: "tests"
-  cancel-in-progress: true
+on: [pull_request, workflow_dispatch]
 
 jobs:
   test:
