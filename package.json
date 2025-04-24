@@ -27,7 +27,7 @@
     "react-dom": "^18.2.0",
     "react-flag-icon-css": "^1.0.25",
     "react-latex": "^2.0.0",
-    "react-router-dom": "^6.4.3"
+    "react-router-dom": "^7.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.5",
