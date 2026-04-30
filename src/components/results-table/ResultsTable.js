@@ -14,6 +14,7 @@ const { Search } = Input;
 class ResultsTable extends React.Component {
   state = {
     loading: true,
+    pendingRequests: 2,
     comp_data: [],
     results_table: [],
     filter: "",
@@ -30,10 +31,10 @@ class ResultsTable extends React.Component {
   calcAndSetResultState(data) {
     const { has_result, complete, results_table, columns } = getKinchTableFromWCIF(data);
     this.setState({
-      loading: false, 
+      loading: false,
       has_result: has_result,
       complete_results: complete,
-      results_table: results_table, 
+      results_table: results_table,
       columns: columns,
       error: false
     });
@@ -53,22 +54,25 @@ class ResultsTable extends React.Component {
     const wcifURL = baseURL + `/competitions/${this.props.compid}/wcif/public`;
     const wcaResultURL = baseURL + `/competitions/${this.props.compid}/results`;
 
-    /* 
-    We want to prioritise using official WCA results where available, then try WCIF results. 
+    /*
+    We want to prioritise using official WCA results where available, then try WCIF results.
     We make both requests simultaneously. If the WCA results are not empty, then use those.
-    If the WCIF arrives, only use it if there are not official results, and leave the WCA 
+    If the WCIF arrives, only use it if there are not official results, and leave the WCA
     request if it is running.
     */
 
+    const decrement = () => this.setState(prev => ({ pendingRequests: prev.pendingRequests - 1 }));
+
     axios.get(wcaResultURL)
       .then(response => response.data)
-      .then(data => { 
+      .then(data => {
         if (data.length > 0) {
           let comp = convertOfficialResultsToWCIFlike(data);
           this.calcAndSetResultState(comp);
-        } 
+        }
       })
-      .catch(err => this.handleFetchError(err));
+      .catch(err => this.handleFetchError(err))
+      .finally(decrement);
 
     axios.get(wcifURL)
       .then(response => response.data)
@@ -79,7 +83,8 @@ class ResultsTable extends React.Component {
           this.calcAndSetResultState(data);
         }
       })
-      .catch(err => this.handleFetchError(err));
+      .catch(err => this.handleFetchError(err))
+      .finally(decrement);
   }
 
   formatColumns(columnNames) {
@@ -90,14 +95,14 @@ class ResultsTable extends React.Component {
         dataIndex: columnNames[i],
         key: columnNames[i],
         width: 100,
-        textWrap: 'word-break',       
+        textWrap: 'word-break',
       }
 
       if (columnNames[i] === "rank") {
         columns[i]["title"] = "#";
         columns[i]["width"] = 45;
         columns[i]["fixed"] = "left";
-        
+
       } else if (columnNames[i] === "name") {
         columns[i]["title"] = "Name";
         columns[i]["width"] = 170;
@@ -125,14 +130,14 @@ class ResultsTable extends React.Component {
           }
         };
       }
-      
+
     }
     return columns;
   }
 
   render() {
     const wcaLiveLink = "https://live.worldcubeassociation.org"
-    
+
     const filteredResults = this.state.results_table.filter(value => {
       if (this.state.filter) {
         return value.name.toLowerCase().includes(this.state.filter.toLowerCase())
@@ -143,26 +148,26 @@ class ResultsTable extends React.Component {
     const handleSearch = (e) => this.setState({filter: e.target.value});
 
     return <>
-      {this.state.error ? 
+      {this.state.error ?
       <Alert
         message="Error"
         description={<span>An error occured when attempting to fetch results.</span>}
         type="error"
         showIcon
-      /> : 
-      <Skeleton loading={this.state.loading} active>
-        {this.state.has_result ? 
+      /> :
+      <Skeleton loading={this.state.pendingRequests > 0 && !this.state.has_result} active>
+        {this.state.has_result ?
           <>
             {this.state.complete_results ? null : <>
               <Alert
                 message="Incomplete results"
-                description={<span>Some events are missing results. The competition might be ongoing. If you are an organiser or delegate for this competition, 
+                description={<span>Some events are missing results. The competition might be ongoing. If you are an organiser or delegate for this competition,
                   don't forget to synchronise results from <a href={wcaLiveLink}>WCA Live</a></span>}
                 type="warning"
                 showIcon
               />
               <Divider />
-            </>} 
+            </>}
             <>
               <div className='small-screen-warning'>
                 <Alert
@@ -175,24 +180,25 @@ class ResultsTable extends React.Component {
               </div>
               <Search placeholder="Filter competitors" loading={this.state.loading} enterButton onChange={handleSearch}></Search>
               <Divider />
-              <Table 
+              <Table
                 columns={this.formatColumns(this.state.columns)}
-                dataSource={filteredResults} 
+                dataSource={filteredResults}
                 sticky={true}
                 scroll={{x: 'max-content'}}
               />
             </>
           </>
-            : 
+            :
+          this.state.pendingRequests === 0 &&
           <Alert
             message="No results"
-            description={<span>If you are an organiser or delegate for this competition, 
+            description={<span>If you are an organiser or delegate for this competition,
               don't forget to synchronise results from <a href={wcaLiveLink}>WCA Live</a></span>}
             type="warning"
             showIcon
           />
         }
-        
+
       </Skeleton>}
     </>
   }
