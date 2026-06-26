@@ -2,6 +2,7 @@
 import React from "react";
 import AppRouter from './routes';
 import { ThemeContext } from './theme/themes';
+import { ConfigProvider, theme as antdTheme } from 'antd';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,14 +18,16 @@ class App extends React.Component {
   }
 
   toggleTheme() {
-    const theme = this.state.theme === 'light' ? 'dark' : 'light';    
+    const theme = this.state.theme === 'light' ? 'dark' : 'light';
     localStorage.setItem('theme', theme);
     this.setState({theme: theme});
   }
 
   render() {
     return <ThemeContext.Provider value={this.state}>
-      <AppRouter />
+      <ConfigProvider theme={{ algorithm: this.state.theme === 'dark' ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm }}>
+        <AppRouter />
+      </ConfigProvider>
     </ThemeContext.Provider>
   }
 }

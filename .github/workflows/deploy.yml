@@ -4,7 +4,7 @@ name: Build and push to pages
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Triggers the workflow on push events but only for the "main" branch
   push:
     branches: [ "main" ]
 
@@ -30,23 +30,29 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           registry-url: https://registry.npmjs.org/
+
       - run: npm ci --legacy-peer-deps
+
       - run: npm run build
         env:
           NODE_ENV: production
+
       - name: Add analytics
         env:
           ANALYTICS_TAG: ${{ vars.ANALYTICS_TAG }}
-        run: sed -i -e 's|<\/head>|'"$ANALYTICS_TAG"'</head>|' ./dist/index.html
+        run: sed -i -e 's|</head>|'"$ANALYTICS_TAG"'</head>|;t;s|<body>|'"$ANALYTICS_TAG"'<body>|' ./dist/index.html
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:          
+        uses: actions/upload-pages-artifact@v5
+        with:
           path: './dist'
+
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v5
